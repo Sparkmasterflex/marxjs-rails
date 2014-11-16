@@ -10,7 +10,6 @@
 
 .marx-js-controls {
   position: fixed;
-  z-index: 300;
   background: #f6f6f6;
   -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
   -moz-box-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
@@ -86,7 +85,7 @@
     position: absolute;
     display: block;
     width: 195px;
-    background-image: url(/assets/groucho.png);
+    background-image: url(groucho.png);
     background-color: #ddd;
     background-repeat: no-repeat;
     background-position: 5px center;
@@ -121,9 +120,9 @@
       background-size: 24px 24px;
       text-align: left; }
     .marx-js-controls .open-controls a.standard-controls {
-      background-image: url(/assets/standard.png); }
+      background-image: url(standard.png); }
     .marx-js-controls .open-controls a.advanced-controls {
-      background-image: url(/assets/advanced.png); }
+      background-image: url(advanced.png); }
 
 .bottom-right, .bottom-left {
   bottom: 0;
@@ -180,7 +179,7 @@
   -moz-box-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
   -o-box-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.7); }
-  .marx-generated-ipsum .container {
+  .marx-generated-ipsum .marx-container {
     overflow-y: auto;
     max-height: 360px;
     margin-top: 30px; }
@@ -198,5 +197,3 @@
     background-color: #333;
     text-align: center;
     text-decoration: none; }
-
-/*# sourceMappingURL=marx.css.map */

@@ -170,9 +170,10 @@ $.extend(Marx.prototype, {
       }
     });
     return $.each(names, function(i, name) {
-      var checked;
+      var checked, clean_name;
       checked = Math.floor(Math.random() * 2) === 1 ? true : false;
-      $("" + _this.settings.form + " input[name=" + name + "]").attr('data-marx-d', true).attr('checked', checked);
+      clean_name = name.replace(/\[/g, '\\[').replace(/\]/g, '\\]');
+      $("" + _this.settings.form + " input[name=" + clean_name + "]").attr('data-marx-d', true).attr('checked', checked);
       if (checked) {
         return _this.effected.check_boxes += 1;
       }
@@ -189,8 +190,9 @@ $.extend(Marx.prototype, {
       }
     });
     return $.each(names, function(i, name) {
-      var total;
-      total = $("" + _this.settings.form + " input[name=" + name + "]").length;
+      var clean_name, total;
+      clean_name = name.replace(/\[/g, '\\[').replace(/\]/g, '\\]');
+      total = $("" + _this.settings.form + " input[name=" + clean_name + "]").length;
       $("" + _this.settings.form + " input[name=" + name + "]:eq(" + (Math.floor(Math.random() * total)) + ")").attr('data-marx-d', true).attr('checked', true);
       return _this.effected.radio_buttons += 1;
     });
@@ -268,7 +270,7 @@ $.extend(Marx.prototype, {
         return 0.5 - Math.random();
       });
       for (i = _i = 1; 1 <= max ? _i <= max : _i >= max; i = 1 <= max ? ++_i : --_i) {
-        $ipsum.find('.container').append("<p>" + monologues[i].body + "</p>");
+        $ipsum.find('.marx-container').append("<p>" + monologues[i].body + "</p>");
       }
       return $('a.marx-ipsum-close').click(function(e) {
         $('.marx-generated-ipsum').slideUp('fast');
