@@ -1,6 +1,6 @@
 window.Marx = function(options) {
   var _this = this;
-  return $.getJSON("http://marxjs.sparkmasterflex.com:9292/quotes", function(data) {
+  return $.getJSON("http://marxjs.sparkmasterflex.com:9292/characters", function(data) {
     _this.marx_json = data;
     return _this.initialize(options);
   });
@@ -34,7 +34,7 @@ $.extend(Marx.prototype, {
   create_controls: function() {
     var open_controls,
       _this = this;
-    $('body').append("<div class=\"marx-js-controls " + this.settings.position + "\">\n  <link rel=\"stylesheet\" href=\"/assets/marx.css\">\n</div>");
+    $('body').append("<div class=\"marx-js-controls " + this.settings.position + "\">\n  <link rel=\"stylesheet\" href=\"http://marxjs.sparkmasterflex.com:9292/marx.css\">\n</div>");
     this.$el = $('.marx-js-controls');
     open_controls = this.settings.controls !== 'toggle-all' ? "<a href='#open-controls' class='open-controls'>MarxJS</a>" : "<div class=\"open-controls\">\n  <a href=\"#advanced-controls\" class=\"advanced-controls\" title=\"Show Advanced Controls\">Advanced Controls</a>\n  <a href=\"#standard-controls\" class=\"standard-controls\" title=\"Show Standard Controls\">Standard Controls</a>\n  <a href=\"#populate-whole-form\" class=\"populate-whole-form\" title=\"Populate Whole Form\">MarxJS</a>\n</div>";
     this.$el.append(open_controls);
@@ -80,31 +80,48 @@ $.extend(Marx.prototype, {
     return this.$el.find(el);
   },
   add_standard_controls: function() {
-    var standard,
+    var action, standard, _i, _len, _ref,
       _this = this;
-    standard = "<div class=\"marx-standard-controls\">\n  <h4>Populate Form Fields</h4>\n  <div class=\"marx-js-group\">\n    <p>Populate whole form</p>\n    <a class='populate-whole-form' href=\"#populate-whole-form\">Go</a>\n  </div>\n  <div class=\"marx-js-group\">\n    <p>Populate TextAreas</p>\n    <a href=\"#populate-textareas\" class=\"populate-textareas\">Go</a>\n  </div>\n  <div class=\"marx-js-group\">\n    <p>Populate Inputs</p>\n    <a href=\"#populate-inputs\" class=\"populate-inputs\">Go</a>\n  </div>\n  <div class=\"marx-js-group\">\n    <p>Populate Check Boxes</p>\n    <a href=\"#populate-checkboxes\" class=\"populate-checkboxes\">Go</a>\n  </div>\n  <div class=\"marx-js-group\">\n    <p>Populate Radio Buttons</p>\n    <a href=\"#populate-radios\" class=\"populate-radios\">Go</a>\n  </div>\n  <div class=\"marx-js-group\">\n    <p>Populate Select Boxes</p>\n    <a href=\"#populate-selects\" class=\"populate-selects\">Go</a>\n  </div>\n</div>";
+    standard = "<div class=\"marx-standard-controls\">\n  <h4>Populate Form Fields</h4>\n</div>";
     this.$('.open-controls').before(standard);
+    _ref = [['populate-whole-form', 'Populate Whole Form'], ['populate-textareas', 'Populate TextAreas'], ['populate-inputs', 'Populate Inputs'], ['populate-checkboxes', 'Populate Check Boxes'], ['populate-radios', 'Populate Radio Buttons'], ['populate-selects', 'Populate Select Boxes']];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      action = _ref[_i];
+      $('.marx-standard-controls').append(this.build_action(action));
+    }
     return this.$('.marx-standard-controls a').click(function(e) {
       return _this.popluate_selected_fields(e);
     });
   },
   add_advanced_controls: function() {
-    var advanced,
+    var action, advanced, _i, _len, _ref,
       _this = this;
-    advanced = "<div class=\"marx-advanced-controls\">\n  <h4>Advanced Options</h4>\n  <div class=\"marx-js-group\">\n    <p>Clear Form</p>\n    <a href=\"#clear-form\" class=\"clear-form\">Go</a>\n  </div>\n  <div class=\"marx-js-group\">\n    <p>Populate and Submit</p>\n    <a href=\"#populate-submit\" class=\"populate-submit\">Go</a>\n  </div>\n  <div class=\"marx-js-group\">\n    <p><span data-text=\"Hide\">Show</span> Hidden Fields</p>\n    <a href=\"#show-hidden\" class=\"show-hidden\">Go</a>\n  </div>\n  <div class=\"marx-js-group\">\n    <p><span data-text=\"Collapse\">Expand</span> Select Boxes</p>\n    <a href=\"#expand-select\" class=\"expand-select\">Go</a>\n  </div>\n  <div class=\"marx-js-group ipsum\">\n    <p>Generate Ipsum<br />\n      <input min=\"1\" max=\"" + this.settings.max_ipsum + "\" type=\"number\" value='" + this.settings.ipsum + "' class=\"no-populate\" name=\"ipsum\" /> Paragraphs\n    </p>\n    <a href=\"#generate-ipsum\" class=\"generate-ipsum\">Go</a>\n  </div>\n</div>";
+    advanced = "<div class=\"marx-advanced-controls\">\n  <h4>Advanced Options</h4>\n</div>";
     this.$('.open-controls').before(advanced);
+    _ref = [['clear-form', 'Clear Form'], ['populate-submit', 'Populate and Submit'], ['show-hidden', '<span data-text="Hide">Show</span> Hidden Fields'], ['expand-select', '<span data-text="Collapse">Expand</span> Select Boxes'], ['random-image', 'Download Random Image'], ['generate-ipsum', 'Generate Ipsum']];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      action = _ref[_i];
+      $('.marx-advanced-controls').append(this.build_action(action));
+    }
     if (this.settings.controls === 'toggle-advanced') {
-      this.$('.marx-advanced-controls').hide();
-      this.$('.marx-standard-controls').append("<a href='#advanced' class='marx-toggle-advanced'>&laquo; Advanced</a>");
-      this.$('a.marx-toggle-advanced').click(function(e) {
-        var txt;
-        txt = $(e.target).hasClass('opened') ? "&laquo; Advanced" : "Close &raquo;";
-        _this.$(e.target).toggleClass('opened').html(txt);
-        return _this.$('.marx-advanced-controls').toggle();
-      });
+      this.set_toggle_advanced();
     }
     return this.$('.marx-advanced-controls a').click(function(e) {
       return _this.advanced_actions(e);
+    });
+  },
+  build_action: function(action) {
+    return "<div class=\"marx-js-group\">\n  <p>" + action[1] + "</p>\n  <a href=\"#" + action[0] + "\" class=\"" + action[0] + "\">Go</a>\n</div>";
+  },
+  set_toggle_advanced: function() {
+    var _this = this;
+    this.$('.marx-advanced-controls').hide();
+    this.$('.marx-standard-controls').append("<a href='#advanced' class='marx-toggle-advanced'>&laquo; Advanced</a>");
+    return this.$('a.marx-toggle-advanced').click(function(e) {
+      var txt;
+      txt = $(e.target).hasClass('opened') ? "&laquo; Advanced" : "Close &raquo;";
+      _this.$(e.target).toggleClass('opened').html(txt);
+      return _this.$('.marx-advanced-controls').toggle();
     });
   },
   /*=========================
@@ -124,39 +141,43 @@ $.extend(Marx.prototype, {
     var _this = this;
     this.effected.inputs = 0;
     return $.each($("" + this.settings.form + " input"), function(i, input) {
-      var obj, val_arr;
+      var brother, movie, obj, strings, value;
       if (!($(input).val() !== "" || $(input).hasClass('no-populate'))) {
         if (['checkbox', 'radio', 'hidden'].indexOf($(input).attr('type') < 0)) {
           _this.effected.inputs += 1;
         }
-        obj = _this.marx_json[Math.floor(Math.random() * _this.marx_json.length)];
-        val_arr = [obj.brother, obj.movie_name];
-        if (obj.alt_brother != null) {
-          val_arr.push(obj.alt_brother);
-        }
-        if (['text', 'password'].indexOf($(input).attr('type') >= 0)) {
-          $(input).attr('data-marx-d', true).val(val_arr[Math.floor(Math.random() * val_arr.length)]);
-        }
-        if ($(input).attr('type') === 'number') {
-          $(input).attr('data-marx-d', true).val(obj.movie_year);
-        }
-        if ($(input).attr('type') === 'email') {
-          $(input).attr('data-marx-d', true).val("" + obj.brother + "@" + (obj.movie_name.toLowerCase().replace(/\s/g, '')) + ".com");
-        }
-        if ($(input).attr('type') === 'date') {
-          return $(input).attr('data-marx-d', true).val("" + obj.movie_year + "-01-01");
-        }
+        obj = _this.get_random();
+        brother = JSON.parse(obj.brother);
+        movie = JSON.parse(obj.movie);
+        strings = [brother.name, movie.name, obj.first_name, obj.last_name, obj.description].filter(function() {
+          return true;
+        });
+        value = (function() {
+          switch ($(input).attr('type')) {
+            case 'number':
+              return movie.year;
+            case 'email':
+              return "" + (brother.name.toLowerCase().replace(/\s/g, '')) + "@" + (movie.name.toLowerCase().replace(/\s/g, '')) + ".com";
+            case 'url':
+              return "http://" + (movie.name.toLowerCase().replace(/\s/g, '')) + ".com";
+            case 'date':
+              return "" + movie.year + "-01-01";
+            default:
+              return strings[Math.floor(Math.random() * strings.length)];
+          }
+        })();
+        return $(input).attr('data-marx-d', true).val(value);
       }
     });
   },
   populate_textareas: function() {
     var _this = this;
     this.effected.textareas = 0;
-    return $.each($("" + this.settings.form + " textarea"), function(i, input) {
-      var obj;
-      _this.effected.textareas += 1;
-      obj = _this.marx_json[Math.floor(Math.random() * _this.marx_json.length)];
-      return $(input).attr('data-marx-d', true).val(obj.body);
+    return $.getJSON("http://marxjs.sparkmasterflex.com:9292/quotes", function(data) {
+      return $.each($("" + _this.settings.form + " textarea"), function(i, input) {
+        _this.effected.textareas += 1;
+        return $(input).attr('data-marx-d', true).val(data[Math.floor(Math.random() * data.length)].body);
+      });
     });
   },
   populate_checkboxes: function() {
@@ -260,12 +281,11 @@ $.extend(Marx.prototype, {
       _this = this;
     $('.marx-generated-ipsum').remove();
     num = this.$('.ipsum input').val();
-    $ipsum = $("<div class='marx-generated-ipsum " + this.settings.position + "'>\n  <h4>Marx Ipsum</h4>\n  <a href='#close' class='marx-ipsum-close'>X</a>\n  <div class='container'></div>\n</div>");
+    $ipsum = $("<div class='marx-generated-ipsum " + this.settings.position + "'>\n  <h4>Marx Ipsum</h4>\n  <a href='#close' class='marx-ipsum-close'>X</a>\n  <div class='marx-container'></div>\n</div>");
     $('body').append($ipsum);
     return $.getJSON("http://marxjs.sparkmasterflex.com:9292/monologues", function(data) {
       var i, max, monologues, _i;
       max = num > data.length ? data.length - 1 : num;
-      console.log("Generated the maximum amount of paragraphs available: " + data.length);
       monologues = data.sort(function() {
         return 0.5 - Math.random();
       });
@@ -277,6 +297,9 @@ $.extend(Marx.prototype, {
         return false;
       });
     });
+  },
+  get_random: function() {
+    return this.marx_json[Math.floor(Math.random() * this.marx_json.length)];
   },
   /*=====================
            EVENTS
@@ -323,8 +346,8 @@ $.extend(Marx.prototype, {
         $('select[data-marx-d=true] option:eq(0)').attr('selected', true);
         break;
       case 'populate-submit':
-        $.when(this.populate_inputs(), this.populate_textareas(), this.populate_checkboxes(), this.populate_radios(), this.populate_selects()).then(function() {
-          $(e.target).replace("<span class='spinner'>Loading</span>");
+        $.when(this.populate_whole_form()).then(function() {
+          $(e.target).replaceWith("<span class='spinner'>Loading</span>");
           return setTimeout(function() {
             return $('form').submit();
           }, 500);
@@ -345,6 +368,9 @@ $.extend(Marx.prototype, {
             return $(select).attr('size', $(select).find('option').length);
           }
         });
+        break;
+      case 'random-image':
+        window.location = "http://marxjs.sparkmasterflex.com:9292/get-image";
         break;
       case 'generate-ipsum':
         this.generate_ipsum();
