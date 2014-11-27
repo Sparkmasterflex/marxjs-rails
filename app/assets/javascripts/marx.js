@@ -1,6 +1,6 @@
 window.Marx = function(options) {
   var _this = this;
-  return $.getJSON("http://marxjs.sparkmasterflex.com:9292/characters", function(data) {
+  return $.getJSON("http://marxjs.com/characters", function(data) {
     _this.marx_json = data;
     return _this.initialize(options);
   });
@@ -34,7 +34,7 @@ $.extend(Marx.prototype, {
   create_controls: function() {
     var open_controls,
       _this = this;
-    $('body').append("<div class=\"marx-js-controls " + this.settings.position + "\">\n  <link rel=\"stylesheet\" href=\"http://marxjs.sparkmasterflex.com:9292/marx.css\">\n</div>");
+    $('body').append("<div class=\"marx-js-controls " + this.settings.position + "\">\n  <link rel=\"stylesheet\" href=\"http://marxjs.com/marx.css\">\n</div>");
     this.$el = $('.marx-js-controls');
     open_controls = this.settings.controls !== 'toggle-all' ? "<a href='#open-controls' class='open-controls'>MarxJS</a>" : "<div class=\"open-controls\">\n  <a href=\"#advanced-controls\" class=\"advanced-controls\" title=\"Show Advanced Controls\">Advanced Controls</a>\n  <a href=\"#standard-controls\" class=\"standard-controls\" title=\"Show Standard Controls\">Standard Controls</a>\n  <a href=\"#populate-whole-form\" class=\"populate-whole-form\" title=\"Populate Whole Form\">MarxJS</a>\n</div>";
     this.$el.append(open_controls);
@@ -173,7 +173,7 @@ $.extend(Marx.prototype, {
   populate_textareas: function() {
     var _this = this;
     this.effected.textareas = 0;
-    return $.getJSON("http://marxjs.sparkmasterflex.com:9292/quotes", function(data) {
+    return $.getJSON("http://marxjs.com/quotes", function(data) {
       return $.each($("" + _this.settings.form + " textarea"), function(i, input) {
         _this.effected.textareas += 1;
         return $(input).attr('data-marx-d', true).val(data[Math.floor(Math.random() * data.length)].body);
@@ -283,7 +283,7 @@ $.extend(Marx.prototype, {
     num = this.$('.ipsum input').val();
     $ipsum = $("<div class='marx-generated-ipsum " + this.settings.position + "'>\n  <h4>Marx Ipsum</h4>\n  <a href='#close' class='marx-ipsum-close'>X</a>\n  <div class='marx-container'></div>\n</div>");
     $('body').append($ipsum);
-    return $.getJSON("http://marxjs.sparkmasterflex.com:9292/monologues", function(data) {
+    return $.getJSON("http://marxjs.com/monologues", function(data) {
       var i, max, monologues, _i;
       max = num > data.length ? data.length - 1 : num;
       monologues = data.sort(function() {
@@ -370,7 +370,7 @@ $.extend(Marx.prototype, {
         });
         break;
       case 'random-image':
-        window.location = "http://marxjs.sparkmasterflex.com:9292/get-image";
+        window.location = "http://marxjs.com/get-image";
         break;
       case 'generate-ipsum':
         this.generate_ipsum();
