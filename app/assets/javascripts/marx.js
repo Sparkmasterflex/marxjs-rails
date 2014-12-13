@@ -1,6 +1,7 @@
 window.Marx = function(options) {
   var _this = this;
-  return $.getJSON("http://marxjs.com/characters", function(data) {
+  this._url = "http://marxjs.com";
+  return $.getJSON("" + this._url + "/characters", function(data) {
     _this.marx_json = data;
     return _this.initialize(options);
   });
@@ -34,9 +35,9 @@ $.extend(Marx.prototype, {
   create_controls: function() {
     var open_controls,
       _this = this;
-    $('body').append("<div class=\"marx-js-controls " + this.settings.position + "\">\n  <link rel=\"stylesheet\" href=\"http://marxjs.com/marx.css\">\n</div>");
+    $('body').append("<div class=\"marx-js-controls " + this.settings.position + "\">\n  <link rel=\"stylesheet\" href=\"" + this._url + "/marx.css\">\n</div>");
     this.$el = $('.marx-js-controls');
-    open_controls = this.settings.controls !== 'toggle-all' ? "<a href='#open-controls' class='open-controls'>MarxJS</a>" : "<div class=\"open-controls\">\n  <a href=\"#advanced-controls\" class=\"advanced-controls\" title=\"Show Advanced Controls\">Advanced Controls</a>\n  <a href=\"#standard-controls\" class=\"standard-controls\" title=\"Show Standard Controls\">Standard Controls</a>\n  <a href=\"#populate-whole-form\" class=\"populate-whole-form\" title=\"Populate Whole Form\">MarxJS</a>\n</div>";
+    open_controls = this.settings.controls !== 'toggle-all' ? "<a href='#open-controls' class='open-controls'>Marx.js</a>" : "<div class=\"open-controls\">\n  <a href=\"#advanced-controls\" class=\"advanced-controls\" title=\"Show Advanced Controls\">Advanced Controls</a>\n  <a href=\"#standard-controls\" class=\"standard-controls\" title=\"Show Standard Controls\">Standard Controls</a>\n  <a href=\"#populate-whole-form\" class=\"quick-populate\" title=\"Populate Whole Form\">Marx.js</a>\n</div>";
     this.$el.append(open_controls);
     this.$el.addClass('marx-js-collapsed');
     switch (this.settings.controls) {
@@ -60,16 +61,18 @@ $.extend(Marx.prototype, {
         this.add_standard_controls();
         this.add_advanced_controls();
         this.$('a.standard-controls').click(function(e) {
+          $('p.marx-notification').remove();
           _this.$('.marx-standard-controls').toggle();
           _this.$('.marx-advanced-controls').hide();
           return false;
         });
         this.$('a.advanced-controls').click(function(e) {
+          $('p.marx-notification').remove();
           _this.$('.marx-advanced-controls').toggle();
           _this.$('.marx-standard-controls').hide();
           return false;
         });
-        return this.$('a.populate-whole-form').click(function(e) {
+        return this.$('a.quick-populate').click(function(e) {
           _this.$('.marx-standard-controls').hide();
           _this.$('.marx-advanced-controls').hide();
           return _this.populate_whole_form(e);
@@ -118,10 +121,7 @@ $.extend(Marx.prototype, {
     this.$('.marx-advanced-controls').hide();
     this.$('.marx-standard-controls').append("<a href='#advanced' class='marx-toggle-advanced'>&laquo; Advanced</a>");
     return this.$('a.marx-toggle-advanced').click(function(e) {
-      var txt;
-      txt = $(e.target).hasClass('opened') ? "&laquo; Advanced" : "Close &raquo;";
-      _this.$(e.target).toggleClass('opened').html(txt);
-      return _this.$('.marx-advanced-controls').toggle();
+      return _this.toggle_advanced($(e.target));
     });
   },
   /*=========================
@@ -141,11 +141,8 @@ $.extend(Marx.prototype, {
     var _this = this;
     this.effected.inputs = 0;
     return $.each($("" + this.settings.form + " input"), function(i, input) {
-      var brother, movie, obj, strings, value;
+      var brother, movie, obj, rand, str, strings, value, year;
       if (!($(input).val() !== "" || $(input).hasClass('no-populate'))) {
-        if (['checkbox', 'radio', 'hidden'].indexOf($(input).attr('type') < 0)) {
-          _this.effected.inputs += 1;
-        }
         obj = _this.get_random();
         brother = JSON.parse(obj.brother);
         movie = JSON.parse(obj.movie);
@@ -161,22 +158,32 @@ $.extend(Marx.prototype, {
             case 'url':
               return "http://" + (movie.name.toLowerCase().replace(/\s/g, '')) + ".com";
             case 'date':
-              return "" + movie.year + "-01-01";
+              rand = Math.random();
+              year = movie.year.toString();
+              return "" + year + "-0" + (year.substr(Math.floor(rand * 4), 1)) + "-2" + (year.substr(Math.floor(rand * 4), 1));
             default:
-              return strings[Math.floor(Math.random() * strings.length)];
+              str = strings[Math.floor(Math.random() * strings.length)];
+              if ((str == null) || str === "") {
+                return "Marx";
+              } else {
+                return str;
+              }
           }
         })();
-        return $(input).attr('data-marx-d', true).val(value);
+        if (['checkbox', 'radio', 'hidden'].indexOf($(input).attr('type') < 0)) {
+          $(input).attr('data-marx-d', true).val(value).trigger('change').trigger('blur');
+          return _this.effected.inputs += 1;
+        }
       }
     });
   },
   populate_textareas: function() {
     var _this = this;
     this.effected.textareas = 0;
-    return $.getJSON("http://marxjs.com/quotes", function(data) {
+    return $.getJSON("" + this._url + "/quotes", function(data) {
       return $.each($("" + _this.settings.form + " textarea"), function(i, input) {
         _this.effected.textareas += 1;
-        return $(input).attr('data-marx-d', true).val(data[Math.floor(Math.random() * data.length)].body);
+        return $(input).attr('data-marx-d', true).val(data[Math.floor(Math.random() * data.length)].body).trigger('change').trigger('blur');
       });
     });
   },
@@ -194,7 +201,7 @@ $.extend(Marx.prototype, {
       var checked, clean_name;
       checked = Math.floor(Math.random() * 2) === 1 ? true : false;
       clean_name = name.replace(/\[/g, '\\[').replace(/\]/g, '\\]');
-      $("" + _this.settings.form + " input[name=" + clean_name + "]").attr('data-marx-d', true).attr('checked', checked);
+      $("" + _this.settings.form + " input[name=" + clean_name + "]").attr('data-marx-d', true).attr('checked', checked).trigger('change').trigger('blur');
       if (checked) {
         return _this.effected.check_boxes += 1;
       }
@@ -214,7 +221,7 @@ $.extend(Marx.prototype, {
       var clean_name, total;
       clean_name = name.replace(/\[/g, '\\[').replace(/\]/g, '\\]');
       total = $("" + _this.settings.form + " input[name=" + clean_name + "]").length;
-      $("" + _this.settings.form + " input[name=" + name + "]:eq(" + (Math.floor(Math.random() * total)) + ")").attr('data-marx-d', true).attr('checked', true);
+      $("" + _this.settings.form + " input[name=" + name + "]:eq(" + (Math.floor(Math.random() * total)) + ")").attr('data-marx-d', true).attr('checked', true).trigger('change').trigger('blur');
       return _this.effected.radio_buttons += 1;
     });
   },
@@ -228,10 +235,11 @@ $.extend(Marx.prototype, {
       rand = Math.floor(Math.random() * total);
       $opt = $(select).find("option:eq(" + rand + ")");
       if (($opt.attr('value') != null) && $opt.attr('value') !== "") {
-        return $opt.attr('selected', true);
+        $opt.attr('selected', true);
       } else {
-        return $opt.next('option').attr('selected', true);
+        $opt.next('option').attr('selected', true);
       }
+      return $(select).trigger('change').trigger('blur');
     });
   },
   toggle_hidden_fields: function() {
@@ -283,7 +291,7 @@ $.extend(Marx.prototype, {
     num = this.$('.ipsum input').val();
     $ipsum = $("<div class='marx-generated-ipsum " + this.settings.position + "'>\n  <h4>Marx Ipsum</h4>\n  <a href='#close' class='marx-ipsum-close'>X</a>\n  <div class='marx-container'></div>\n</div>");
     $('body').append($ipsum);
-    return $.getJSON("http://marxjs.com/monologues", function(data) {
+    return $.getJSON("" + this._url + "/monologues", function(data) {
       var i, max, monologues, _i;
       max = num > data.length ? data.length - 1 : num;
       monologues = data.sort(function() {
@@ -307,7 +315,20 @@ $.extend(Marx.prototype, {
   */
 
   toggle_controls: function(e) {
+    $('p.marx-notification').remove();
     this.$el.toggleClass('marx-js-collapsed');
+    if (this.settings.controls === 'toggle-advanced' && this.$el.hasClass('marx-js-collapsed')) {
+      if ($('.marx-advanced-controls').is(':visible')) {
+        this.toggle_advanced($('a.marx-toggle-advanced'));
+      }
+    }
+    return false;
+  },
+  toggle_advanced: function($link) {
+    var txt;
+    txt = $link.hasClass('opened') ? "&laquo; Advanced" : "Close &raquo;";
+    $link.toggleClass('opened').html(txt);
+    this.$('.marx-advanced-controls').toggle();
     return false;
   },
   popluate_selected_fields: function(e) {
@@ -370,7 +391,7 @@ $.extend(Marx.prototype, {
         });
         break;
       case 'random-image':
-        window.location = "http://marxjs.com/get-image";
+        window.location = "" + this._url + "/get-image";
         break;
       case 'generate-ipsum':
         this.generate_ipsum();

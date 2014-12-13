@@ -10,6 +10,7 @@
 
 .marx-js-controls {
   position: fixed;
+  z-index: 2000;
   background: #f6f6f6;
   -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
   -moz-box-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
@@ -96,14 +97,14 @@
     background-size: 32px 32px;
     color: #333;
     text-align: right; }
-    .marx-js-controls .open-controls a.populate-whole-form {
+    .marx-js-controls .open-controls a.quick-populate {
       padding: 10px; }
-    .marx-js-controls .open-controls a.populate-whole-form,
+    .marx-js-controls .open-controls a.quick-populate,
     .marx-js-controls .open-controls a.standard-controls, .marx-js-controls .open-controls a.advanced-controls {
       display: block;
       float: right;
       background-color: transparent; }
-      .marx-js-controls .open-controls a.populate-whole-form:hover,
+      .marx-js-controls .open-controls a.quick-populate:hover,
       .marx-js-controls .open-controls a.standard-controls:hover, .marx-js-controls .open-controls a.advanced-controls:hover {
         background-color: #ccc; }
     .marx-js-controls .open-controls a.standard-controls, .marx-js-controls .open-controls a.advanced-controls {
