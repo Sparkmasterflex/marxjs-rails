@@ -86,7 +86,7 @@
     position: absolute;
     display: block;
     width: 195px;
-    background-image: url(http://marxjs.com/assets/icons/groucho.png);
+    background-image: url(groucho.png);
     background-color: #ddd;
     background-repeat: no-repeat;
     background-position: 5px center;
@@ -121,9 +121,9 @@
       background-size: 24px 24px;
       text-align: left; }
     .marx-js-controls .open-controls a.standard-controls {
-      background-image: url(http://marxjs.com/assets/icons/standard.png); }
+      background-image: url(standard.png); }
     .marx-js-controls .open-controls a.advanced-controls {
-      background-image: url(http://marxjs.com/assets/icons/advanced.png); }
+      background-image: url(advanced.png); }
 
 .bottom-right, .bottom-left {
   bottom: 0;
