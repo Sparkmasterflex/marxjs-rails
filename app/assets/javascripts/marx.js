@@ -35,7 +35,7 @@ $.extend(Marx.prototype, {
   create_controls: function() {
     var open_controls,
       _this = this;
-    $('body').append("<div class=\"marx-js-controls " + this.settings.position + "\">\n  <link rel=\"stylesheet\" href=\"/assets/marx.css\">\n</div>");
+    $('body').append("<div class=\"marx-js-controls marx-" + this.settings.position + "\">\n  <link rel=\"stylesheet\" href=\"/assets/marx.css\">\n</div>");
     this.$el = $('.marx-js-controls');
     open_controls = this.settings.controls !== 'toggle-all' ? "<a href='#open-controls' class='open-controls'>Marx.js</a>" : "<div class=\"open-controls\">\n  <a href=\"#advanced-controls\" class=\"advanced-controls\" title=\"Show Advanced Controls\">Advanced Controls</a>\n  <a href=\"#standard-controls\" class=\"standard-controls\" title=\"Show Standard Controls\">Standard Controls</a>\n  <a href=\"#populate-whole-form\" class=\"quick-populate\" title=\"Populate Whole Form\">Marx.js</a>\n</div>";
     this.$el.append(open_controls);
@@ -170,12 +170,18 @@ $.extend(Marx.prototype, {
               }
           }
         })();
+        if ($(input).attr('type') === 'password') {
+          _this.show_password($(input), value);
+        }
         if (['checkbox', 'radio', 'hidden'].indexOf($(input).attr('type') < 0)) {
           $(input).attr('data-marx-d', true).val(value).trigger('change').trigger('blur');
           return _this.effected.inputs += 1;
         }
       }
     });
+  },
+  show_password: function($input, password) {
+    return $input.after("<p class='marx-password-note'>Password: " + password + "</p>");
   },
   populate_textareas: function() {
     var _this = this;

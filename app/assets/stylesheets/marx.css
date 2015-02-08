@@ -125,50 +125,61 @@
     .marx-js-controls .open-controls a.advanced-controls {
       background-image: url(advanced.png); }
 
-.bottom-right, .bottom-left {
+.marx-bottom-right, .marx-bottom-left {
   bottom: 0;
   padding-bottom: 40px;
   border-top: 1px solid #ddd; }
-  .bottom-right .open-controls, .bottom-left .open-controls {
+  .marx-bottom-right .open-controls, .marx-bottom-left .open-controls {
     bottom: 0; }
 
-.top-right, .top-left {
+.marx-top-right, .marx-top-left {
   top: 0;
   padding-top: 40px;
   border-bottom: 1px solid #ddd; }
-  .top-right .open-controls, .top-left .open-controls {
+  .marx-top-right .open-controls, .marx-top-left .open-controls {
     top: 0; }
 
-.top-right,
-.bottom-right {
+.marx-top-right,
+.marx-bottom-right {
   /*
    * using the same class as marx-js-controls
    * puts ipsum on opposite side
    */ }
-  .top-right.marx-js-controls,
-  .bottom-right.marx-js-controls {
+  .marx-top-right.marx-js-controls,
+  .marx-bottom-right.marx-js-controls {
     right: 0;
     padding-bottom: 50px;
     border-left: 1px solid #ddd; }
-    .top-right.marx-js-controls .open-controls,
-    .bottom-right.marx-js-controls .open-controls {
+    .marx-top-right.marx-js-controls .open-controls,
+    .marx-bottom-right.marx-js-controls .open-controls {
       right: 0; }
-  .top-right.marx-generated-ipsum,
-  .bottom-right.marx-generated-ipsum {
+  .marx-top-right.marx-generated-ipsum,
+  .marx-bottom-right.marx-generated-ipsum {
     left: 0;
     border-right: 1px solid #ddd; }
 
-.top-left.marx-js-controls,
-.bottom-left.marx-js-controls {
+.marx-top-left.marx-js-controls,
+.marx-bottom-left.marx-js-controls {
   left: 0;
   border-right: 1px solid #ddd; }
-  .top-left.marx-js-controls .open-controls,
-  .bottom-left.marx-js-controls .open-controls {
+  .marx-top-left.marx-js-controls .open-controls,
+  .marx-bottom-left.marx-js-controls .open-controls {
     left: 0; }
-.top-left.marx-generated-ipsum,
-.bottom-left.marx-generated-ipsum {
+.marx-top-left.marx-generated-ipsum,
+.marx-bottom-left.marx-generated-ipsum {
   right: 0;
   border-left: 1px solid #ddd; }
+
+p.marx-password-note {
+  font-size: 16px;
+  padding: 3px 5px;
+  background-color: rgba(51, 51, 51, 0.8);
+  border: 1px solid #333;
+  color: #ddd;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px; }
 
 .marx-generated-ipsum {
   position: fixed;
