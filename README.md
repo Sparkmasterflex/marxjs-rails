@@ -1,5 +1,7 @@
 # marxjs-rails gem
 
+[![Gem Version](https://badge.fury.io/rb/marxjs-rails.svg)](http://badge.fury.io/rb/marxjs-rails)
+
 Marx.js was created for developers building web applications with long forms. Marx.js is a plugin that gives the developer the ability to populate any and all the fields in their forms easily and with a small 10kb file.
 
 Forms are populated with Marx Brother names, years of their movies and quotes from those movies.
