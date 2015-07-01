@@ -19,27 +19,39 @@ And then execute:
 Or install it yourself as:
 
     $ gem install marxjs-rails
-
+    
 ## Usage
-Add the following directive to your Javascript manifest file (application.js):
+Simply add the `render_marxjs` helper method to your Rails layout or to any specific page you wish.
 
 <pre>
-  //= marx
+  &lt;html>
+  &lt;head>...&lt;/head>
+  &lt;body>
+    &lt;h1>My Content&lt;/h1>
+    ...
+    &lt;%= render_marxjs %>
+  &lt;/body>
+  &lt;/html>
 </pre>
 
-Simply create a new instance of the `Marx` object in one of your `.js.coffee` files and you are up and running.
+To add options to the Marx.js plugin, simply pass them as a _Hash_ to the helper method:
 
 <pre>
-  $ ->
-	marx = new Marx()
+  # Switching to Haml :)
+  %html
+    %head
+      ... omitted ...
+    %body
+      %h1 My Content
+      ... omitted ...
+      
+      = render_marxjs {controls: 'toggle-all', position: 'top-left'}
 </pre>
 
-If you wish to limit this to only one form make sure to pass the _form_ option to the `Marx` object:
+If you wish to have Marx.js in your production and/or staging environment, pass the last argument of `false`:
 
 <pre>
-  $ ->
-    marx = new Marx
-      form: 'form.my-form'
+  = render_marxjs {controls: 'toggle-all', position: 'top-left'}, <i style='color: #c00'>false</i>
 </pre>
 
 ### Options
@@ -68,6 +80,48 @@ If you wish to limit this to only one form make sure to pass the _form_ option t
 
 Marx.js has a dependency on jQuery version >= 1.10.x
 
+
+
+## Upgrading to Version 2.x
+In version 2.x we have made it easier to include Marx.js without having to remove/alter anything when deploying to production. When upgrading from version 1.x, you will need to **REMOVE** the following:
+
+### application.js _(mainifest file)_
+
+<pre>
+  //= require jquery
+  <del style='color: #c00'>//= marx</del>
+  //= require_tree .
+  //= require_self
+</pre>
+
+### Your JavaScript file
+<pre>
+  $ ->
+    <del style='color: #c00'>marx = new Marx()</del>
+</pre>
+
+## Version 1.x
+
+Add the following directive to your Javascript manifest file (application.js):
+
+<pre>
+  //= marx
+</pre>
+
+Simply create a new instance of the `Marx` object in one of your `.js.coffee` files and you are up and running.
+
+<pre>
+  $ ->
+	marx = new Marx()
+</pre>
+
+If you wish to limit this to only one form make sure to pass the _form_ option to the `Marx` object:
+
+<pre>
+  $ ->
+    marx = new Marx
+      form: 'form.my-form'
+</pre>
 
 ## Contributing
 
