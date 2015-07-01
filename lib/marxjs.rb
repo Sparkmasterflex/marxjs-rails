@@ -1,0 +1,1 @@
+require 'marxjs/rails' if defined?(Rails)
